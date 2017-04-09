@@ -1,0 +1,85 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:gravity="center"
+             android:orientation="vertical"
+             android:background="@drawable/gradient_background"
+             tools:context=".view.contribute.SelectWasteTypeFragment">
+
+    <include layout="@layout/logo"/>
+
+    <GridLayout
+        android:id="@+id/gridType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:useDefaultMargins="true"
+        android:alignmentMode="alignBounds"
+        android:columnOrderPreserved="true"
+        android:columnCount="3">
+
+        <ImageView
+            android:id="@+id/wasteType1"
+            android:background="@drawable/waste_type_icon_selector"
+            android:contentDescription="Waste type 1"
+            android:tag="Sac poubelle"/>
+
+        <ImageView
+            android:id="@+id/wasteType2"
+            android:background="@drawable/waste_type_icon_selector"
+            android:contentDescription="Waste type 2"
+            android:tag="Chiasse"/>
+
+        <ImageView
+            android:id="@+id/wasteType3"
+            android:background="@drawable/waste_type_icon_selector"
+            android:contentDescription="Waste type 3"
+            android:tag="Animal"/>
+
+        <ImageView
+            android:id="@+id/wasteType4"
+            android:background="@drawable/waste_type_icon_selector"
+            android:contentDescription="Waste type 4"
+            android:tag="Mégot de cigarette"/>
+
+        <ImageView
+            android:id="@+id/wasteType5"
+            android:background="@drawable/waste_type_icon_selector"
+            android:contentDescription="Waste type 5"
+            android:tag="Encombrants"/>
+
+        <ImageView
+            android:id="@+id/wasteType6"
+            android:background="@drawable/waste_type_icon_selector"
+            android:contentDescription="Waste type 6"
+            android:tag="Autres"/>
+
+        <ImageView
+            android:id="@+id/wasteType7"
+            android:background="@drawable/waste_type_icon_selector"
+            android:contentDescription="Waste type 6"
+            android:tag="Autres"/>
+
+        <ImageView
+            android:id="@+id/wasteType8"
+            android:background="@drawable/waste_type_icon_selector"
+            android:contentDescription="Waste type 6"
+            android:tag="Autres"/>
+
+        <ImageView
+            android:id="@+id/wasteType9"
+            android:background="@drawable/waste_type_icon_selector"
+            android:contentDescription="Waste type 6"
+            android:tag="Autres"/>
+    </GridLayout>
+
+    <Button
+        android:id="@+id/btValidateType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ok_button"
+        android:textSize="16sp"/>
+
+</LinearLayout>
+

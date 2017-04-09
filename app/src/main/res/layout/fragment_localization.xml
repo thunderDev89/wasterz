@@ -1,0 +1,52 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:background="@drawable/gradient_background"
+              tools:context=".view.contribute.LocalizationFragment">
+
+    <include layout="@layout/logo"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Location icon"
+        android:src="@drawable/ic_place_black_48dp"
+        />
+    <Button
+        android:id="@+id/btLocalizeMe"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:text="@string/localize_me_button"
+        android:textAllCaps="false"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/or_label"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/manual_address_label"/>
+
+    <EditText
+        android:id="@+id/txtManualAddress"
+        android:layout_width="200dp"
+        android:layout_height="36dp"
+        android:background="@android:color/background_light"
+        android:backgroundTint="@android:color/background_light"
+        android:hint="@string/address_text"
+        android:textSize="12sp"/>
+
+    <Button
+        android:id="@+id/btValidateLocalization"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ok_button"
+        android:textSize="16sp"/>
+
+</LinearLayout>

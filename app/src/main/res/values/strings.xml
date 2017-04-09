@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Wasterz</string>
+
+    <string name="localize_me_button">Je géolocalise le déchêt</string>
+    <string name="manual_address_label">Je rentre une addresse</string>
+    <string name="or_label">ou</string>
+    <string name="address_text">Adresse</string>
+    <string name="take_a_photo_label">Je prend une photo</string>
+    <string name="ok_button">OK</string>
+    <string name="app_file_provider">com.example.android.fileprovider</string>
+    <string name="pics_dir_path">/Wasterz/Pics</string>
+</resources>
