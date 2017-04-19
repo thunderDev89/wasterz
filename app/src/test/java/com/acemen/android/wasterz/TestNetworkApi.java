@@ -4,7 +4,9 @@ import com.acemen.android.wasterz.repository.network.NetworkUtils;
 import com.acemen.android.wasterz.repository.network.api.WasterzApi;
 import com.acemen.android.wasterz.repository.network.interceptor.DefaultAuthorizationInterceptor;
 import com.acemen.android.wasterz.repository.network.interceptor.GzipInterceptor;
+import com.acemen.android.wasterz.repository.network.model.NetworkResponse;
 import com.acemen.android.wasterz.repository.network.odata.ODataCriteria;
+import com.google.gson.Gson;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,13 +21,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/**
- * Created by Audrik ! on 20/04/2017.
- */
-
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
 public class TestNetworkApi {
+
     @Test
     public void testLoadWastes() throws IOException {
         OkHttpClient client = new OkHttpClient.Builder()
@@ -46,8 +45,13 @@ public class TestNetworkApi {
 
         Response response = client.newCall(request).execute();
         Assert.assertNotNull(response);
-        System.err.println("Response = "+response.body().string());
+//        System.err.println("Response = "+response.body().string());
         Assert.assertTrue(response.message(), response.isSuccessful());
+
+        final Gson gson = new Gson();
+        final NetworkResponse networkResponse = gson.fromJson(response.body().charStream(), NetworkResponse.class);
+        Assert.assertEquals("success", networkResponse.getSuccess());
+        Assert.assertTrue("It should be at least one waste", networkResponse.getData().getWastes().length != 0);
     }
 
     private ODataCriteria getCriteria() {

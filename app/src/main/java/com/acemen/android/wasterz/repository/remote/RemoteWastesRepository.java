@@ -68,7 +68,6 @@ public class RemoteWastesRepository implements WasteDataSource {
             @Override
             public void onFailure(Call call, IOException e) {
                 Timber.e("Error when getting wastes", e);
-
                 callback.onDataNotAvailable();
             }
 
@@ -78,11 +77,8 @@ public class RemoteWastesRepository implements WasteDataSource {
                     Timber.d("Request successfully sent");
                     String body = response.body().string();
                     Timber.d("reponse json ->\n" + body);
-
-//                    callback.onWastesLoaded(wastes);
                 } else {
                     Timber.e("Response code = "+response.code());
-
                     callback.onDataNotAvailable();
                 }
                 response.body().close();
