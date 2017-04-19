@@ -7,14 +7,16 @@ package com.acemen.android.wasterz.domain.model;
 public class Waste {
     private long id;
     private String remoteId;
-    private String wasteType;
+    private String type;
     private String address;
+    private long longitude;
+    private long latitude;
     private String captureFilename;
 
     public Waste() {}
 
-    public Waste(String wasteType, String address, String captureFilename) {
-        this.wasteType = wasteType;
+    public Waste(String type, String address, String captureFilename) {
+        this.type = type;
         this.address = address;
         this.captureFilename = captureFilename;
     }
@@ -35,12 +37,12 @@ public class Waste {
         this.remoteId = remoteId;
     }
 
-    public String getWasteType() {
-        return wasteType;
+    public String getType() {
+        return type;
     }
 
-    public void setWasteType(String wasteType) {
-        this.wasteType = wasteType;
+    public void setType(String wasteType) {
+        this.type = wasteType;
     }
 
     public String getAddress() {
@@ -57,5 +59,21 @@ public class Waste {
 
     public void setCaptureFilename(String captureFilename) {
         this.captureFilename = captureFilename;
+    }
+
+    public long getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(long longitude) {
+        this.longitude = longitude;
+    }
+
+    public long getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(long latitude) {
+        this.latitude = latitude;
     }
 }
