@@ -1,5 +1,7 @@
 package com.acemen.android.wasterz.repository.network;
 
+import android.support.annotation.MainThread;
+
 import com.acemen.android.wasterz.repository.network.interceptor.DefaultAuthorizationInterceptor;
 import com.acemen.android.wasterz.repository.network.interceptor.GzipInterceptor;
 
@@ -14,6 +16,7 @@ import okhttp3.OkHttpClient;
 public class NetworkRequest {
     private OkHttpClient mClient;
 
+    @MainThread
     public void initClient() {
         if (mClient == null) {
             mClient = new OkHttpClient.Builder()

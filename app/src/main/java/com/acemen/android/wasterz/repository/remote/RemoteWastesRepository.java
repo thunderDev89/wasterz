@@ -5,11 +5,13 @@ import android.support.annotation.NonNull;
 import com.acemen.android.wasterz.domain.WasteDataSource;
 import com.acemen.android.wasterz.domain.model.Waste;
 import com.acemen.android.wasterz.repository.network.NetworkUtils;
-import com.acemen.android.wasterz.repository.network.api.ApiClient;
+import com.acemen.android.wasterz.repository.network.api.WasterzApi;
 import com.acemen.android.wasterz.repository.network.interceptor.DefaultAuthorizationInterceptor;
 import com.acemen.android.wasterz.repository.network.interceptor.GzipInterceptor;
+import com.acemen.android.wasterz.repository.network.odata.ODataCriteria;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -28,11 +30,9 @@ import timber.log.Timber;
 public class RemoteWastesRepository implements WasteDataSource {
     private static RemoteWastesRepository INSTANCE;
 
-    private ApiClient mApi;
     private OkHttpClient mClient;
 
-    private RemoteWastesRepository(ApiClient api) {
-        mApi = api;
+    private RemoteWastesRepository() {
         if (mClient == null) {
             mClient = new OkHttpClient.Builder()
                     .addInterceptor(new GzipInterceptor())
@@ -44,9 +44,9 @@ public class RemoteWastesRepository implements WasteDataSource {
         }
     }
 
-    public static RemoteWastesRepository getInstance(ApiClient api) {
+    public static RemoteWastesRepository getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new RemoteWastesRepository(api);
+            INSTANCE = new RemoteWastesRepository();
         }
         return INSTANCE;
     }
@@ -58,10 +58,11 @@ public class RemoteWastesRepository implements WasteDataSource {
 
     @Override
     public void loadWastes(@NonNull final LoadWastesCallback callback) {
+        WasterzApi api = new WasterzApi();
         final String route = "v1/waste";
-        final String criteria = "$select=id,address,longitude,latitude&$orderby=id desc&$top=10";
+        final ODataCriteria criteria = getCriteria();
         Request request = new Request.Builder()
-                .url(NetworkUtils.URL.encode(mApi, "GET", route) + normalizeCriteria(criteria))
+                .url(NetworkUtils.URL.encode(api, "GET", route) + criteria.getEncodedCriteria())
                 .build();
 
         mClient.newCall(request).enqueue(new Callback() {
@@ -75,8 +76,9 @@ public class RemoteWastesRepository implements WasteDataSource {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.code() == 200) {
                     Timber.d("Request successfully sent");
-                    String body = response.body().string();
+                    final String body = response.body().string();
                     Timber.d("reponse json ->\n" + body);
+                    callback.onWastesLoaded(parseToWastesList(body));
                 } else {
                     Timber.e("Response code = "+response.code());
                     callback.onDataNotAvailable();
@@ -84,6 +86,21 @@ public class RemoteWastesRepository implements WasteDataSource {
                 response.body().close();
             }
         });
+    }
+
+    private List<Waste> parseToWastesList(String remoteResponse) {
+        ArrayList<Waste> list = new ArrayList<>(1);
+        list.add(new Waste());
+        list.get(0).setAddress(remoteResponse);
+        return list;
+    }
+
+    private ODataCriteria getCriteria() {
+        final ODataCriteria criteria = new ODataCriteria();
+        criteria.addCriteria(ODataCriteria.PARAM_SELECT, "id,address,longitude,latitude");
+        criteria.addCriteria(ODataCriteria.PARAM_ORDER_BY, "id desc");
+        criteria.addCriteria(ODataCriteria.PARAM_TOP, "5");
+        return criteria;
     }
 
     /**

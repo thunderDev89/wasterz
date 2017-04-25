@@ -21,17 +21,17 @@ public class AddWaste extends AbstractUsecase<AddWaste.Request, AddWaste.Respons
     }
 
     @Override
-    public void execute(Request request, @NonNull final UsecaseCallback<Response> usecaseCallback) {
+    public void run(Request request) {
         mRepo.addWaste(request.getWaste(), new WasteDataSource.AddWasteCallback() {
             @Override
             public void onWasteAdded(String msg) {
                 Timber.d("Waste added");
-                usecaseCallback.onSuccess(new Response());
+                getUsecaseCallback().onSuccess(new Response());
             }
 
             @Override
             public void onDataNotAvailable() {
-                usecaseCallback.onError();
+                getUsecaseCallback().onError();
             }
         });
     }

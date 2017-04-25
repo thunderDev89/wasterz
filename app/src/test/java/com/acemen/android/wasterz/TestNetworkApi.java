@@ -50,7 +50,7 @@ public class TestNetworkApi {
 
         final Gson gson = new Gson();
         final NetworkResponse networkResponse = gson.fromJson(response.body().charStream(), NetworkResponse.class);
-        Assert.assertEquals("success", networkResponse.getSuccess());
+        Assert.assertEquals("true", networkResponse.getSuccess());
         Assert.assertTrue("It should be at least one waste", networkResponse.getData().getWastes().length != 0);
     }
 

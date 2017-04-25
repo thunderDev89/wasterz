@@ -1,7 +1,5 @@
 package com.acemen.android.wasterz.domain.overview.usecase;
 
-import android.support.annotation.NonNull;
-
 import com.acemen.android.wasterz.domain.AbstractUsecase;
 import com.acemen.android.wasterz.domain.WasteDataSource;
 import com.acemen.android.wasterz.domain.model.Waste;
@@ -23,18 +21,18 @@ public class LoadWastes extends AbstractUsecase<AbstractUsecase.Request, LoadWas
     }
 
     @Override
-    public void execute(AbstractUsecase.Request request, @NonNull final UsecaseCallback<Response> usecaseCallback) {
+    public void run(AbstractUsecase.Request request) {
         mRepo.loadWastes(new WasteDataSource.LoadWastesCallback() {
             @Override
             public void onWastesLoaded(List<Waste> wastes) {
                 Timber.d("Wastes sucessfully loaded");
                 final Response response = new Response(wastes);
-                usecaseCallback.onSuccess(response);
+                getUsecaseCallback().onSuccess(response);
             }
 
             @Override
             public void onDataNotAvailable() {
-                usecaseCallback.onError();
+                getUsecaseCallback().onError();
             }
         });
     }
