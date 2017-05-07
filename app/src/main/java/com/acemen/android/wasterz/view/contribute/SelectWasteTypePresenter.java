@@ -1,6 +1,6 @@
 package com.acemen.android.wasterz.view.contribute;
 
-import com.acemen.android.wasterz.view.contribute.utils.Utils;
+import com.acemen.android.wasterz.view.model.WasteHolder;
 
 import timber.log.Timber;
 
@@ -8,19 +8,21 @@ import timber.log.Timber;
  * Created by Audrik ! on 23/03/2017.
  */
 
-public class SelectWasteTypePresenter implements Contribute.Presenter.Step2, Contribute.PagerVisitor {
+public class SelectWasteTypePresenter extends AbstractPresenter implements Contribute.Presenter.Step2, Contribute.PagerVisitor {
     private Contribute.View.Step2View mView;
     private Contribute.Pager mPager;
     private String mWasteType;
     private boolean onPause = false;
 
-    public SelectWasteTypePresenter(Contribute.View.Step2View mView) {
+    public SelectWasteTypePresenter(Contribute.View.Step2View mView, WasteHolder wasteHolder) {
+        super(wasteHolder);
         attachView(mView);
     }
 
     @Override
     public void attachView(Contribute.View.Step2View view) {
         mView = view;
+        mView.setPresenter(this);
     }
 
     @Override
@@ -37,7 +39,7 @@ public class SelectWasteTypePresenter implements Contribute.Presenter.Step2, Con
     }
 
     @Override
-    public void goToNextTep() {
+    public void goToNextStep() {
         if (mWasteType != null)
             mPager.next(Contribute.SELECT_WASTE_TYPE_FRAGMENT_POSITION);
         else
@@ -47,15 +49,17 @@ public class SelectWasteTypePresenter implements Contribute.Presenter.Step2, Con
     @Override
     public void onResume() {
         Timber.d("OnResume Called");
-        mWasteType = Utils.getStringPreferences(mView.getContext(), Contribute.TYPE_PARAM, Contribute.PREFS_NAME);
-        onPause = true;
+        mWasteType = getWasteHolder().getWasteType();
+//        mWasteType = Utils.getStringPreferences(mView.getContext(), Contribute.TYPE_PARAM, Contribute.PREFS_NAME);
+        onPause = false;
     }
 
     @Override
     public void onPause() {
         Timber.d("OnPause Called");
         if (!onPause) {
-            Utils.setStringPreferences(mView.getContext(), Contribute.TYPE_PARAM, mWasteType, Contribute.PREFS_NAME);
+            getWasteHolder().setWasteType(mWasteType);
+//            Utils.setStringPreferences(mView.getContext(), Contribute.TYPE_PARAM, mWasteType, Contribute.PREFS_NAME);
             onPause = true;
         }
     }

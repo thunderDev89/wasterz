@@ -34,11 +34,15 @@ public interface Contribute {
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({
             ADDRESS_PARAM,
+            LONGITUDE_PARAM,
+            LATITUDE_PARAM,
             TYPE_PARAM,
             FILENAME_PARAM
     })
     @interface WasteParam{}
     String ADDRESS_PARAM = "address";
+    String LONGITUDE_PARAM = "longitude";
+    String LATITUDE_PARAM = "latitude";
     String TYPE_PARAM = "wasteType";
     String FILENAME_PARAM = "filename";
 
@@ -63,10 +67,14 @@ public interface Contribute {
             String getAddress();
 
             void showErrorMessage(String message);
+
+            void setPresenter(Presenter.Step1 presenter);
         }
 
         interface Step2View extends MVP.View { // Select waste type
             void noTypeSelected();
+
+            void setPresenter(Presenter.Step2 presenter);
         }
 
         interface Step3View extends MVP.View { // Take photo
@@ -80,18 +88,23 @@ public interface Contribute {
 
             /** Used by camera feature purpose */
             void startActivityForResult(Intent intent, int requestCode);
+
+            void setPresenter(Presenter.Step3 presenter);
         }
     }
 
     interface Presenter {
+
         interface Step1 extends MVP.Presenter<View.Step1View> { // Geolocation of waste
             void findLocation();
 
-            void goToNextStep();
+            void onCreateView();
 
             void onStart();
 
             void onStop();
+
+            void goToNextStep();
 
             void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults);
         }
@@ -99,7 +112,7 @@ public interface Contribute {
         interface Step2 extends MVP.Presenter<View.Step2View> { // Select waste type
             void selectWasteType(String type);
 
-            void goToNextTep();
+            void goToNextStep();
         }
 
         interface Step3 extends MVP.Presenter<View.Step3View> { // Select photo

@@ -10,45 +10,40 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 
+import com.acemen.android.wasterz.view.model.WasteHolder;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
-import com.acemen.android.wasterz.view.contribute.utils.Utils;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import timber.log.Timber;
-
 /**
  * Created by Audrik ! on 19/03/2017.
  */
 
-public class LocalizationPresenter implements Contribute.Presenter.Step1, Contribute.PagerVisitor, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class LocalizationPresenter extends AbstractPresenter implements Contribute.Presenter.Step1, Contribute.PagerVisitor, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private Contribute.View.Step1View mView;
     private GoogleApiClient mGoogleApiClient;
 
     private Contribute.Pager mPager;
     private String mAddress;
+    private String mLongitude;
+    private String mLatitude;
     private boolean onPause = true;
 
     private static final int MY_LOCATION_PERMISSION = 4512;
 
-    LocalizationPresenter(Contribute.View.Step1View view) {
+    LocalizationPresenter(Contribute.View.Step1View view, WasteHolder wasteHolder) {
+        super(wasteHolder);
         attachView(view);
     }
 
     @Override
     public void attachView(Contribute.View.Step1View view) {
         mView = view;
-
-        // init api Client
-        mGoogleApiClient = new GoogleApiClient.Builder(view.getContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+        mView.setPresenter(this);
     }
 
     @Override
@@ -84,6 +79,8 @@ public class LocalizationPresenter implements Contribute.Presenter.Step1, Contri
         if (location != null) {
             Address address = geocode(location.getLatitude(), location.getLongitude());
             mAddress = address.getAddressLine(0);
+            mLongitude = ""+location.getLongitude();
+            mLatitude = ""+location.getLatitude();
             mView.showLocation(mAddress);
         } else {
             mView.locationNotFound();
@@ -123,6 +120,16 @@ public class LocalizationPresenter implements Contribute.Presenter.Step1, Contri
             mPager.next(Contribute.LOCALIZATION_FRAGMENT_POSITION);
         } else
             mView.locationNotFound();
+    }
+
+    @Override
+    public void onCreateView() {
+        // init api Client
+        mGoogleApiClient = new GoogleApiClient.Builder(mView.getContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
     }
 
     @Override
@@ -167,8 +174,7 @@ public class LocalizationPresenter implements Contribute.Presenter.Step1, Contri
 
     @Override
     public void onResume() {
-        Timber.d("OnResume called");
-        mAddress = Utils.getStringPreferences(mView.getContext(), Contribute.ADDRESS_PARAM, Contribute.PREFS_NAME);
+        loadWastesParamFromPreferences();
         onPause = false;
         if (mAddress != null) {
             mView.showLocation(mAddress);
@@ -177,10 +183,29 @@ public class LocalizationPresenter implements Contribute.Presenter.Step1, Contri
 
     @Override
     public void onPause() {
-        Timber.d("OnPause Called");
         if (!onPause) {
-            Utils.setStringPreferences(mView.getContext(), Contribute.ADDRESS_PARAM, mAddress, Contribute.PREFS_NAME);
+            saveWasteParamToPreferences();
             onPause = true;
         }
+    }
+
+
+
+    private void loadWastesParamFromPreferences() {
+        mAddress = getWasteHolder().getAddress();
+        mLongitude = getWasteHolder().getLongitude();
+        mLatitude = getWasteHolder().getLatitude();
+//        mAddress = Utils.getStringPreferences(mView.getContext(), Contribute.ADDRESS_PARAM, Contribute.PREFS_NAME);
+//        mLongitude = Utils.getStringPreferences(mView.getContext(), Contribute.LONGITUDE_PARAM, Contribute.PREFS_NAME);
+//        mLatitude = Utils.getStringPreferences(mView.getContext(), Contribute.LATITUDE_PARAM, Contribute.PREFS_NAME);
+    }
+
+    private void saveWasteParamToPreferences() {
+        getWasteHolder().setAddress(mAddress);
+        getWasteHolder().setLongitude(mLongitude);
+        getWasteHolder().setLatitude(mLatitude);
+//        Utils.setStringPreferences(mView.getContext(), Contribute.ADDRESS_PARAM, mAddress, Contribute.PREFS_NAME);
+//        Utils.setStringPreferences(mView.getContext(), Contribute.LONGITUDE_PARAM, mLongitude, Contribute.PREFS_NAME);
+//        Utils.setStringPreferences(mView.getContext(), Contribute.LATITUDE_PARAM, mLatitude, Contribute.PREFS_NAME);
     }
 }

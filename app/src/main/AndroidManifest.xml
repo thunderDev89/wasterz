@@ -20,6 +20,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".view.contribute.ContributeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
 
         <provider
@@ -33,11 +38,6 @@
         </provider>
 
         <activity android:name=".view.overview.OverviewActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
     </application>
 

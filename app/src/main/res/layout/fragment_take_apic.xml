@@ -16,13 +16,19 @@
         android:src="@drawable/ic_photo_camera_white_24dp"/>
     <ImageView
         android:id="@+id/capturedPhoto"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:contentDescription="Captured photo"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/take_a_photo_label"
         android:textSize="12sp"/>
+    <Button android:id="@+id/btPublishWaste"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/publish_waste_button"
+            android:textAllCaps="false"
+            android:textSize="12sp"/>
+
 
 </LinearLayout>

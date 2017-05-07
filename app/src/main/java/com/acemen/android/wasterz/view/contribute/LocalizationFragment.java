@@ -40,7 +40,7 @@ public class LocalizationFragment extends Fragment implements Contribute.PagerVi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPresenter = new LocalizationPresenter(this);
+//        mPresenter = new LocalizationPresenter(this);
         ((Contribute.PagerVisitor) mPresenter).setPager(mPager);
     }
 
@@ -64,6 +64,8 @@ public class LocalizationFragment extends Fragment implements Contribute.PagerVi
                 mPresenter.findLocation();
             }
         });
+
+        mPresenter.onCreateView();
 
         return rootView;
     }
@@ -91,14 +93,14 @@ public class LocalizationFragment extends Fragment implements Contribute.PagerVi
     @Override
     public void onResume() {
         Timber.d("OnResume called");
-//        mPresenter.onResume();
+        mPresenter.onResume();
         super.onResume();
     }
 
     @Override
     public void onPause() {
         Timber.d("Onpause called");
-//        mPresenter.onPause();
+        mPresenter.onPause();
         super.onPause();
     }
 
@@ -127,5 +129,10 @@ public class LocalizationFragment extends Fragment implements Contribute.PagerVi
     @Override
     public MVP.Presenter getPresenter() {
         return mPresenter;
+    }
+
+    @Override
+    public void setPresenter(Contribute.Presenter.Step1 presenter) {
+        mPresenter = presenter;
     }
 }

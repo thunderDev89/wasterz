@@ -8,10 +8,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 
 import com.acemen.android.wasterz.R;
-import com.acemen.android.wasterz.view.contribute.utils.Utils;
+import com.acemen.android.wasterz.view.model.WasteHolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,10 +23,11 @@ import timber.log.Timber;
  * Created by Audrik ! on 21/03/2017.
  */
 
-public class TakeAPicPresenter implements Contribute.Presenter.Step3 {
-    private static final String LOG_TAG = TakeAPicPresenter.class.getSimpleName();
+public class TakeAPicPresenter extends AbstractPresenter implements Contribute.Presenter.Step3, Contribute.PagerVisitor {
     private static final int REQUEST_IMAGE_CAPTURE = 0326;
     private static final String EXTRA_CAPTURE_FILE = "com.acemen.android.captureExtra";
+
+    private Contribute.Pager mPager;
 
     private Contribute.View.Step3View mView;
 
@@ -35,13 +35,21 @@ public class TakeAPicPresenter implements Contribute.Presenter.Step3 {
 
     private boolean onPause = false;
 
-    public TakeAPicPresenter(Contribute.View.Step3View view) {
+    public TakeAPicPresenter(Contribute.View.Step3View view, WasteHolder wasteHolder) {
+        super(wasteHolder);
         attachView(view);
     }
 
     @Override
     public void attachView(Contribute.View.Step3View view) {
         mView = view;
+        mView.setPresenter(this);
+    }
+
+
+    @Override
+    public void setPager(Contribute.Pager pager) {
+        mPager = pager;
     }
 
     @Override
@@ -56,7 +64,7 @@ public class TakeAPicPresenter implements Contribute.Presenter.Step3 {
             try {
                 photoFile = createImageFile();
             } catch (IOException e) {
-                Log.e(LOG_TAG, "Error when saving photo", e);
+                Timber.e("Error when saving photo", e);
                 mView.errorSavingPhoto();
             }
             if (photoFile != null) {
@@ -92,8 +100,6 @@ public class TakeAPicPresenter implements Contribute.Presenter.Step3 {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE
                 && resultCode == Activity.RESULT_OK) {
-//            if (mCurrentPhotoPath != null)
-//                mView.displayPhoto("file:" + mCurrentPhotoPath);
 
             if (data != null) {
                 final Bundle extras = data.getExtras();
@@ -115,13 +121,19 @@ public class TakeAPicPresenter implements Contribute.Presenter.Step3 {
 
     @Override
     public void goToNextStep() {
-
+        Timber.d("Go to next step of pic step");
+        if (mCurrentPhotoPath != null) {
+            mPager.next(Contribute.TAKE_A_PIC_FRAGMENT_POSITION);
+        } else {
+            mView.noPhotoTaken();
+        }
     }
 
     @Override
     public void onResume() {
         Timber.d("OnResume called");
-        Utils.getStringPreferences(mView.getContext(), Contribute.FILENAME_PARAM, Contribute.PREFS_NAME);
+//        mCurrentPhotoPath = getWasteHolder().setFilename();
+//        Utils.getStringPreferences(mView.getContext(), Contribute.FILENAME_PARAM, Contribute.PREFS_NAME);
         onPause = false;
     }
 
@@ -129,7 +141,8 @@ public class TakeAPicPresenter implements Contribute.Presenter.Step3 {
     public void onPause() {
         Timber.d("OnPause called");
         if (!onPause) {
-            Utils.setStringPreferences(mView.getContext(), Contribute.FILENAME_PARAM, mCurrentPhotoPath, Contribute.PREFS_NAME);
+            getWasteHolder().setFilename(mCurrentPhotoPath);
+//            Utils.setStringPreferences(mView.getContext(), Contribute.FILENAME_PARAM, mCurrentPhotoPath, Contribute.PREFS_NAME);
             onPause = true;
         }
     }

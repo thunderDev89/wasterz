@@ -9,8 +9,8 @@ public class Waste {
     private String remoteId;
     private String type;
     private String address;
-    private long longitude;
-    private long latitude;
+    private double longitude;
+    private double latitude;
     private String captureFilename;
 
     public Waste() {}
@@ -54,26 +54,44 @@ public class Waste {
     }
 
     public String getCaptureFilename() {
-        return captureFilename;
+        return captureFilename.substring(captureFilename.lastIndexOf("/")+1);
     }
 
     public void setCaptureFilename(String captureFilename) {
         this.captureFilename = captureFilename;
     }
 
-    public long getLongitude() {
+    public String getFilePath() {
+        return captureFilename;
+    }
+
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(long longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public long getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(long latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Waste:[")
+                .append("id=").append(id).append("\n")
+                .append("Address=").append(address).append("\n")
+                .append("Long=").append(longitude).append("\n")
+                .append("Lat=").append(latitude).append("\n")
+                .append("Type=").append(type).append("\n")
+                .append("CaptureFileName=").append(captureFilename).append("\n")
+                .append("]");
+        return builder.toString();
     }
 }

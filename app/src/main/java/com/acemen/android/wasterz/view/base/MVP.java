@@ -16,7 +16,7 @@ public interface MVP {
     interface Model{}
 
     interface Presenter<V> {
-        public void attachView(V view);
+        void attachView(V view);
 
         void onResume();
 

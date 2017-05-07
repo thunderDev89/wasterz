@@ -28,16 +28,31 @@ public class Utils {
     }
 
     /**
-     * set String Preference Value
-     *
-     * @param context
-     * @param prefName Preference name
-     * @param Value    Preference value
+     * Get long preference value
      */
-    public static void setStringPreferences(Context context, @Contribute.WasteParam String prefName, String Value, String PREFS_FILE_NAME) {
+    public static long getLongPreferences(Context context, @Contribute.WasteParam String prefName,
+            String PREFS_FILE_NAME) {
+        prefs = context.getSharedPreferences(PREFS_FILE_NAME, Context.MODE_PRIVATE);
+        if (prefs.contains(prefName))
+            return prefs.getLong(prefName, 0);
+        else
+            return 0;
+    }
+
+    /**
+     * set String Preference Value
+     */
+    public static void setStringPreferences(Context context, @Contribute.WasteParam String prefName, String value, String PREFS_FILE_NAME) {
         prefs = context.getSharedPreferences(PREFS_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(prefName, Value);
+        editor.putString(prefName, value);
+        editor.apply();
+    }
+
+    public static void setLongPreferences(Context context, @Contribute.WasteParam String prefName, long value, String PREFS_FILE_NAME) {
+        prefs = context.getSharedPreferences(PREFS_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(prefName, value);
         editor.apply();
     }
 }

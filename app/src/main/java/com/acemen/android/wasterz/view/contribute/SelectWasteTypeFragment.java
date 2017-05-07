@@ -47,7 +47,7 @@ public class SelectWasteTypeFragment extends Fragment implements Contribute.View
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new SelectWasteTypePresenter(this);
+//        mPresenter = new SelectWasteTypePresenter(this);
         ((Contribute.PagerVisitor) mPresenter).setPager(mPager);
     }
 
@@ -61,7 +61,7 @@ public class SelectWasteTypeFragment extends Fragment implements Contribute.View
         mBtValidateType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.goToNextTep();
+                mPresenter.goToNextStep();
             }
         });
 
@@ -101,6 +101,11 @@ public class SelectWasteTypeFragment extends Fragment implements Contribute.View
         return mPresenter;
     }
 
+    @Override
+    public void setPresenter(Contribute.Presenter.Step2 presenter) {
+        mPresenter = presenter;
+    }
+
     private class WasteTypeClickListener implements View.OnClickListener {
 
         @Override
@@ -111,13 +116,13 @@ public class SelectWasteTypeFragment extends Fragment implements Contribute.View
 
     @Override
     public void onResume() {
-//        mPresenter.onResume();
+        mPresenter.onResume();
         super.onResume();
     }
 
     @Override
     public void onPause() {
-//        mPresenter.onPause();
+        mPresenter.onPause();
         super.onPause();
     }
 }

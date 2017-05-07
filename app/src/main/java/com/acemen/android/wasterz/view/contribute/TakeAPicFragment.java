@@ -6,11 +6,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -22,14 +21,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class TakeAPicFragment extends Fragment implements Contribute.View.Step3View {
+public class TakeAPicFragment extends Fragment implements Contribute.View.Step3View,
+        Contribute.PagerVisitor {
     @BindView(R.id.iconPhoto)
     ImageView mIconPhoto;
 
     @BindView(R.id.capturedPhoto)
     ImageView mCapturedPhoto;
 
+    @BindView(R.id.btPublishWaste)
+    Button mBtPublish;
+
     private Contribute.Presenter.Step3 mPresenter;
+
+    //TODO reference to remove from view. Add it to presenter
+    private Contribute.Pager mPager;
 
     public TakeAPicFragment() {
         // Required empty public constructor
@@ -38,7 +44,8 @@ public class TakeAPicFragment extends Fragment implements Contribute.View.Step3V
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPresenter = new TakeAPicPresenter(this);
+//        mPresenter = new TakeAPicPresenter(this);
+        ((Contribute.PagerVisitor) mPresenter).setPager(mPager);
     }
 
     @Override
@@ -54,6 +61,13 @@ public class TakeAPicFragment extends Fragment implements Contribute.View.Step3V
                 mPresenter.takePhoto();
             }
         });
+
+        mBtPublish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.goToNextStep();
+            }
+        });
         return rootView;
     }
 
@@ -66,10 +80,10 @@ public class TakeAPicFragment extends Fragment implements Contribute.View.Step3V
     @Override
     public void displayPhoto(Bitmap photo) {
         Timber.d("Display photo by Bitmap");
-        final RoundedBitmapDrawable roundedPhoto = RoundedBitmapDrawableFactory.create(getResources(), photo);
-        roundedPhoto.setCornerRadius(Math.max(photo.getWidth(), photo.getHeight()) / 2.0f);
-        mCapturedPhoto.setImageDrawable(roundedPhoto);
-//        mCapturedPhoto.setImageBitmap(photo);
+//        final RoundedBitmapDrawable roundedPhoto = RoundedBitmapDrawableFactory.create(getResources(), photo);
+//        roundedPhoto.setCornerRadius(Math.max(photo.getWidth(), photo.getHeight()) / 2.0f);
+//        mCapturedPhoto.setImageDrawable(roundedPhoto);
+        mCapturedPhoto.setImageBitmap(photo);
     }
 
     @Override
@@ -93,7 +107,29 @@ public class TakeAPicFragment extends Fragment implements Contribute.View.Step3V
     }
 
     @Override
+    public void setPager(Contribute.Pager pager) {
+        mPager = pager;
+    }
+
+    @Override
     public MVP.Presenter getPresenter() {
         return mPresenter;
+    }
+
+    @Override
+    public void setPresenter(Contribute.Presenter.Step3 presenter) {
+        mPresenter = presenter;
+    }
+
+    @Override
+    public void onResume() {
+        mPresenter.onResume();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        mPresenter.onPause();
+        super.onPause();
     }
 }
