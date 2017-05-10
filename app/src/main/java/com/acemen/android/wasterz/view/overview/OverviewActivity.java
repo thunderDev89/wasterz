@@ -33,9 +33,6 @@ public class OverviewActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-//        txtListWastes = (TextView) findViewById(R.id.txtListWastes1);
-//        btLoadWastes = (Button) findViewById(R.id.btLoadWastes1);
-
         btLoadWastes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

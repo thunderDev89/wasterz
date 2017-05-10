@@ -29,7 +29,7 @@ public class TestNetworkApi {
     public void testLoadWastes() throws IOException {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new GzipInterceptor())
-                .addInterceptor(new DefaultAuthorizationInterceptor())
+                .addInterceptor(new DefaultAuthorizationInterceptor(new WasterzApi()))
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)

@@ -12,6 +12,7 @@ public class Waste {
     private double longitude;
     private double latitude;
     private String captureFilename;
+    private long creationDate;
 
     public Waste() {}
 
@@ -81,6 +82,14 @@ public class Waste {
         this.latitude = latitude;
     }
 
+    public long getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(long creationDate) {
+        this.creationDate = creationDate;
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -91,6 +100,7 @@ public class Waste {
                 .append("Lat=").append(latitude).append("\n")
                 .append("Type=").append(type).append("\n")
                 .append("CaptureFileName=").append(captureFilename).append("\n")
+                .append("CreationDate=").append(creationDate).append("\n")
                 .append("]");
         return builder.toString();
     }

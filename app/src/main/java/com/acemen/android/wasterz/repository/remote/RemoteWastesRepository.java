@@ -67,7 +67,6 @@ public class RemoteWastesRepository implements WasteDataSource {
     @Override
     public void addWaste(@NonNull Waste newWaste, @NonNull final AddWasteCallback callback) {
         final String route = "v1/waste";
-//        final ODataCriteria criteria = getCriteria();
         final RequestBody body = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("file", newWaste.getCaptureFilename(),
@@ -76,7 +75,7 @@ public class RemoteWastesRepository implements WasteDataSource {
                 .addFormDataPart("numFiles", "1")
                 .addFormDataPart(PARAM_FILENAME, newWaste.getCaptureFilename())
                 .addFormDataPart(PARAM_ADRESSE, newWaste.getAddress())
-                .addFormDataPart(PARAM_LATITUDE, newWaste.getLongitude()+"")
+                .addFormDataPart(PARAM_LONGITUDE, newWaste.getLongitude()+"")
                 .addFormDataPart(PARAM_LATITUDE, newWaste.getLatitude()+"")
                 .addFormDataPart(PARAM_WASTE_TYPE, newWaste.getType())
                 .build();
