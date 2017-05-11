@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import timber.log.Timber;
+
 /**
  * Created by Audrik ! on 09/05/2017.
  */
@@ -23,7 +25,8 @@ public class WasterzDbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        Timber.w("Upgrade from version %d to %d", oldVersion, newVersion);
         sqLiteDatabase.execSQL(WasterzContract.WasteEntry.SQL_DELETE_TABLE);
         onCreate(sqLiteDatabase);
     }

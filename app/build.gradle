@@ -43,6 +43,7 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:10.2.1'
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.3.2'
+//    testCompile 'org.robolectric:robolectric:3.0' -- avoid error : No such manifest file: build\intermediates\bundles\debug\AndroidManifest.xml when running ronbolectric tests
     testCompile 'org.mockito:mockito-core:2.7.22'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.1.0'
 }

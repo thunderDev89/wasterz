@@ -1,5 +1,6 @@
-package com.acemen.android.wasterz;
+package com.acemen.android.wasterz.repository.remote;
 
+import com.acemen.android.wasterz.BuildConfig;
 import com.acemen.android.wasterz.repository.network.NetworkUtils;
 import com.acemen.android.wasterz.repository.network.api.WasterzApi;
 import com.acemen.android.wasterz.repository.network.interceptor.DefaultAuthorizationInterceptor;

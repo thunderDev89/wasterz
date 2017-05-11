@@ -1,4 +1,4 @@
-package com.acemen.android.wasterz;
+package com.acemen.android.wasterz.repository.remote;
 
 import com.acemen.android.wasterz.repository.network.odata.ODataCriteria;
 
